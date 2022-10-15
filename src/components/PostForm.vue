@@ -2,19 +2,19 @@
   <form action="" @submit.prevent="createPost">
     <h4>Створення посту:</h4>
     <div>
-      <input
+      <MyInput
         v-model="post.title"
         type="text"
         placeholder="Додати назву"
-      >
+      />
       {{ post.title }}
     </div>
     <div>
-      <input
+      <MyInput
         v-model="post.body"
         type="text"
         placeholder="Додати опис"
-      >
+      />
       {{ post.body }}
     </div>
     <my-button>
@@ -24,10 +24,8 @@
 </template>
 
 <script>
-import MyButton from '@/components/UI/MyButton';
 export default {
   name: 'PostForm',
-  components: { MyButton },
   data() {
     return {
       post: {
@@ -43,7 +41,6 @@ export default {
         title: this.post.title,
         description: this.post.body
       }
-      console.log(newItem);
       this.$emit('create', newItem)
       this.post.title = '';
       this.post.body = '';
