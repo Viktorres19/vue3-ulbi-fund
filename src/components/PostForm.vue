@@ -3,7 +3,8 @@
     <h4>Створення посту:</h4>
     <div>
       <MyInput
-        v-model="post.title"
+        v-model:value="post.title"
+        v-model:myValue="post.title"
         type="text"
         placeholder="Додати назву"
       />
