@@ -17,13 +17,17 @@
       >
       {{ post.body }}
     </div>
-    <button>Створити запис</button>
+    <my-button>
+      Створити пост
+    </my-button>
   </form>
 </template>
 
 <script>
+import MyButton from '@/components/UI/MyButton';
 export default {
-  name: "PostForm",
+  name: 'PostForm',
+  components: { MyButton },
   data() {
     return {
       post: {

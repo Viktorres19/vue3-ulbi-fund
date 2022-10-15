@@ -20,5 +20,7 @@ export default {
 </script>
 
 <style scoped>
-
+.post-list {
+  padding-top: 15px;
+}
 </style>
