@@ -3,6 +3,7 @@
     <PostForm @create="create" />
     <PostList
       :posts="posts"
+      @remove="removePost"
     />
   </div>
 </template>
@@ -18,13 +19,16 @@ export default {
       posts: [
         { id: 1, title: 'Javascript', description: 'JS' },
         { id: 2, title: 'PHP', description: 'Elephant' },
-        { id: 1, title: 'Ruby', description: 'Some chrystal' },
+        { id: 3, title: 'Ruby', description: 'Some chrystal' },
       ]
     }
   },
   methods: {
     create(newPost) {
       this.posts.push(newPost);
+    },
+    removePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id)
     }
   }
 }
