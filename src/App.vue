@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       posts: [],
-      dialogVisible: false
+      modificatorValue: ''
     }
   },
   created() {
