@@ -1,5 +1,5 @@
 <template>
-  <form action="" @submit.prevent="createPost">
+  <form @submit.prevent="createPost">
     <h4>Створення посту:</h4>
     <div>
       <MyInput
@@ -12,7 +12,7 @@
     </div>
     <div>
       <MyInput
-        v-model="post.body"
+        v-model:value="post.body"
         type="text"
         placeholder="Додати опис"
       />
