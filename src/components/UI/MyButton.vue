@@ -1,12 +1,13 @@
 <template>
-  <button class="button">
+  <button :style="{ margin: buttonStyles.margin }" class="button">
     <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'MyButton'
+  name: 'MyButton',
+  props: ['buttonStyles']
 }
 </script>
 
