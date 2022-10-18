@@ -17,22 +17,21 @@
 </template>
 
 <script>
-import PostForm from "@/components/PostForm";
-import PostList from "@/components/PostList";
-import MyDialog from "./components/UI/MyDialog";
+import axios from 'axios';
+import PostForm from '@/components/PostForm';
+import PostList from '@/components/PostList';
+
 export default {
   name: 'App',
-  components: {MyDialog, PostList, PostForm},
+  components: {PostList, PostForm},
   data() {
     return {
-      posts: [
-        { id: 1, title: 'Javascript', description: 'JS' },
-        { id: 2, title: 'PHP', description: 'Elephant' },
-        { id: 3, title: 'Ruby', description: 'Some chrystal' },
-      ],
-      dialogVisible: false,
+      posts: [],
       modificatorValue: ''
     }
+  },
+  created() {
+    this.fetchPosts();
   },
   methods: {
     create(newPost) {
@@ -44,7 +43,16 @@ export default {
     },
     showDialog() {
       this.dialogVisible = true
-    }
+    },
+    async fetchPosts() {
+      try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        this.posts = response.data;
+        console.log(response.data);
+      } catch (e) {
+        alert('Помилка')
+      }
+    },
   }
 }
 </script>
@@ -63,7 +71,7 @@ export default {
   padding: 0 15px 15px;
   max-width: 1200px;
 }
-.m15-0 {
-  margin: 15px 0;
+.post .button {
+  margin-left: 10px;
 }
 </style>

@@ -16,5 +16,6 @@ export default {
   padding: 10px;
   background-color: white;
   color: green;
+  white-space: nowrap;
 }
 </style>
