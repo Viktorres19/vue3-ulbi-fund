@@ -3,7 +3,7 @@
     <h4>Створення посту:</h4>
     <div>
       <MyInput
-        v-model:value="post.title"
+        v-model:value.trim="post.title"
         v-model:myValue="post.title"
         type="text"
         placeholder="Додати назву"
@@ -12,7 +12,7 @@
     </div>
     <div>
       <MyInput
-        v-model:value="post.body"
+        v-model:value.trim="post.body"
         type="text"
         placeholder="Додати опис"
       />
