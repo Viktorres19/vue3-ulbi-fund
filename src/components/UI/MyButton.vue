@@ -1,13 +1,12 @@
 <template>
-  <button :style="{ margin: buttonStyles.margin }" class="button">
+  <button class="button">
     <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'MyButton',
-  props: ['buttonStyles']
+  name: 'MyButton'
 }
 </script>
 
@@ -17,5 +16,6 @@ export default {
   padding: 10px;
   background-color: white;
   color: green;
+  white-space: nowrap;
 }
 </style>
