@@ -3,7 +3,6 @@
     <h1>Сторінка з користувачами</h1>
     <my-button
       @click="showDialog"
-      :buttonStyles="buttonStyles"
     >
       Створити користувача
     </my-button>
@@ -32,9 +31,7 @@ export default {
         { id: 3, title: 'Ruby', description: 'Some chrystal' },
       ],
       dialogVisible: false,
-      buttonStyles: {
-        margin: '10px 0'
-      }
+      modificatorValue: ''
     }
   },
   methods: {
@@ -65,5 +62,8 @@ export default {
   margin: 0 auto;
   padding: 0 15px 15px;
   max-width: 1200px;
+}
+.m15-0 {
+  margin: 15px 0;
 }
 </style>
