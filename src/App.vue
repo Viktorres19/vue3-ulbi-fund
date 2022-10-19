@@ -1,11 +1,15 @@
 <template>
   <div class="container">
-    <h1>Сторінка з користувачами</h1>
+    <h1>Сторінка з постами</h1>
+    <MyInput
+      @input="changeSearchQuery"
+      placeholder="Пошук постів..."
+    />
     <div class="app-buttons">
       <my-button
         @click="showDialog"
       >
-        Створити користувача
+        Створити пост
       </my-button>
       <MySelect
         v-model="selectedSort"
@@ -16,7 +20,7 @@
       <PostForm @create="create" />
     </my-dialog>
     <PostList
-      :posts="posts"
+      :posts="sortedAndSearchedPosts"
       @remove="removePost"
       v-if="!isPostsLoading"
     />
@@ -35,10 +39,10 @@ export default {
   data() {
     return {
       posts: [],
-      modificatorValue: '',
       dialogVisible: false,
       isPostsLoading: false,
       selectedSort: '',
+      searchQuery: '',
       sortOptions: [
         {value: 'title', name: 'Назві'},
         {value: 'body', name: 'Вмісту'}
@@ -46,6 +50,9 @@ export default {
     }
   },
   methods: {
+    changeSearchQuery(e) {
+      this.searchQuery = e.target.value;
+    },
     create(newPost) {
       this.posts.push(newPost);
       this.dialogVisible = false;
@@ -71,19 +78,23 @@ export default {
   mounted() {
     this.fetchPosts();
   },
-  watch: {
+  /*watch: {
     selectedSort(newValue) {
       this.posts.sort((post1, post2) => {
         return post1[newValue]?.localeCompare(post2[newValue])
       })
     }
-  },
+  },*/
   // sort using computed
-  /*computed: {
+  computed: {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+    },
+    sortedAndSearchedPosts() {
+      console.log(this.searchQuery);
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
     }
-  },*/
+  },
 }
 </script>
 
