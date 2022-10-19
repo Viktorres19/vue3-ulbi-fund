@@ -1,11 +1,17 @@
 <template>
   <div class="container">
     <h1>Сторінка з користувачами</h1>
-    <my-button
-      @click="showDialog"
-    >
-      Створити користувача
-    </my-button>
+    <div class="app-buttons">
+      <my-button
+        @click="showDialog"
+      >
+        Створити користувача
+      </my-button>
+      <MySelect
+        v-model="selectedSort"
+        :options="sortOptions"
+      />
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <PostForm @create="create" />
     </my-dialog>
@@ -31,7 +37,12 @@ export default {
       posts: [],
       modificatorValue: '',
       dialogVisible: false,
-      isPostsLoading: false
+      isPostsLoading: false,
+      selectedSort: '',
+      sortOptions: [
+        {value: 'title', name: 'Назві'},
+        {value: 'body', name: 'Вмісту'}
+      ]
     }
   },
   mounted() {
@@ -79,5 +90,13 @@ export default {
 }
 .post .button {
   margin-left: 10px;
+}
+.app-buttons {
+  margin: 15px 0;
+  padding: 15px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #c5ebf7;
 }
 </style>
