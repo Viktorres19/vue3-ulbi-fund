@@ -40,7 +40,7 @@ export default {
       let newItem = {
         id: Date.now(),
         title: this.post.title,
-        description: this.post.body
+        body: this.post.body
       }
       this.$emit('create', newItem)
       this.post.title = '';
