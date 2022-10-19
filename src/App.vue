@@ -45,9 +45,6 @@ export default {
       ]
     }
   },
-  mounted() {
-    this.fetchPosts();
-  },
   methods: {
     create(newPost) {
       this.posts.push(newPost);
@@ -70,7 +67,23 @@ export default {
         this.isPostsLoading = false;
       }
     },
-  }
+  },
+  mounted() {
+    this.fetchPosts();
+  },
+  watch: {
+    selectedSort(newValue) {
+      this.posts.sort((post1, post2) => {
+        return post1[newValue]?.localeCompare(post2[newValue])
+      })
+    }
+  },
+  // sort using computed
+  /*computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+    }
+  },*/
 }
 </script>
 
