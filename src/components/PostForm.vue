@@ -46,7 +46,16 @@ export default {
       this.post.title = '';
       this.post.body = '';
     }
-  }
+  },
+  /*watch: {
+    //deep seeked object
+    post: {
+      handler(newVal) {
+        console.log(newVal)
+      },
+      deep: true
+    }
+  }*/
 }
 </script>
 
