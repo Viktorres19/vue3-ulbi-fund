@@ -1,7 +1,7 @@
 <template>
   <div class="post-list">
     <template v-if="posts.length">
-      <h3>Перелік користувачів:</h3>
+      <h3>Список постів:</h3>
       <transition-group name="post-list">
         <PostItem
           :post="post"
