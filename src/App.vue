@@ -25,7 +25,8 @@
       v-if="!isPostsLoading"
     />
     <svg v-if="isPostsLoading" xmlns="http://www.w3.org/2000/svg" style="margin:auto;background:0 0;display:block;shape-rendering:auto" width="200" height="200" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="4.166666666666666s"/><path fill-opacity=".8" fill="#e15b64" d="M50 50V0a50 50 0 0 1 50 50Z"/></g><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="5.5555555555555545s"/><path fill-opacity=".8" fill="#f47e60" d="M50 50h50a50 50 0 0 1-50 50Z"/></g><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="8.333333333333332s"/><path fill-opacity=".8" fill="#f8b26a" d="M50 50v50A50 50 0 0 1 0 50Z"/></g><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="16.666666666666664s"/><path fill-opacity=".8" fill="#abbd81" d="M50 50H0A50 50 0 0 1 50 0Z"/></g></svg>
-    <div class="page__wrapper">
+    <div ref="observer" class="observer"></div>
+<!--    <div class="page__wrapper">
       <button
         v-for="pageSwitcher in totalPages"
         :key="pageSwitcher"
@@ -34,7 +35,7 @@
       >
         {{ pageSwitcher }}
       </button>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -93,17 +94,44 @@ export default {
         this.isPostsLoading = false;
       }
     },
-    switchPage(pageSwitcher) {
-      this.page = pageSwitcher;
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+        this.posts = [...this.posts, ...response.data];
+      } catch (e) {
+        alert('Помилка')
+      }
     },
+    /*switchPage(pageSwitcher) {
+      this.page = pageSwitcher;
+    },*/
   },
   watch: {
-    page() {
+    /*page() {
       this.fetchPosts();
-    }
+    }*/
   },
   mounted() {
     this.fetchPosts();
+    console.log(this.$refs.observer);
+    const options = {
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts()
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   /*watch: {
     selectedSort(newValue) {
@@ -175,5 +203,9 @@ export default {
 .page__wrapper button:hover {
   background-color: #c5ebf7;
   color: white;
+}
+.observer {
+  min-height: 30px;
+  background-color: green;
 }
 </style>
