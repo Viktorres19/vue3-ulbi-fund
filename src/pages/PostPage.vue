@@ -120,7 +120,6 @@ export default {
   },
   mounted() {
     this.fetchPosts();
-    console.log(this.$refs.observer);
     const options = {
       rootMargin: '0px',
       threshold: 1.0
@@ -146,7 +145,6 @@ export default {
       return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
     },
     sortedAndSearchedPosts() {
-      console.log(this.searchQuery);
       return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
     }
   },

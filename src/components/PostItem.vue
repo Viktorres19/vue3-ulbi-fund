@@ -5,9 +5,14 @@
       <div><strong>Назва: </strong>{{ post.title }}</div>
       <div><strong>Опис: </strong>{{ post.body }}</div>
     </div>
-    <my-button @click="$emit('remove', post)">
-      Видалити пост
-    </my-button>
+    <div class="post__buttons">
+      <my-button @click="$router.push(`/posts/${post.id}`)">
+        Відкрити
+      </my-button>
+      <my-button @click="$emit('remove', post)">
+        Видалити пост
+      </my-button>
+    </div>
   </div>
 </template>
 
@@ -34,5 +39,13 @@ export default {
 }
 .post:last-of-type {
   margin-bottom: 5px;
+}
+.post__buttons {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+.button {
+  margin-left: 5px;
 }
 </style>
