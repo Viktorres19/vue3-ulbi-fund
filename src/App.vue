@@ -26,7 +26,4 @@ export default {
   padding: 0 15px 15px;
   max-width: 1200px;
 }
-.post .button {
-  margin-left: 10px;
-}
 </style>
