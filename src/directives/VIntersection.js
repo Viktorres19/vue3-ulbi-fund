@@ -15,5 +15,6 @@ export default {
     const observer = new IntersectionObserver(callback, options);
     // seeking for the current element. directive linked to it
     observer.observe(el);
-  }
+  },
+  name: 'intersection'
 }

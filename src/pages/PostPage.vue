@@ -4,6 +4,7 @@
     <MyInput
       @input="changeSearchQuery"
       placeholder="Пошук постів..."
+      v-focus
     />
     <div class="app-buttons">
       <my-button
