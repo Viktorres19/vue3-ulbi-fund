@@ -3,6 +3,7 @@
     <h4>Створення посту:</h4>
     <div>
       <MyInput
+        v-focus
         v-model:value.trim="post.title"
         v-model:myValue="post.title"
         type="text"
