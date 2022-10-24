@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App'
 import components from '@/components/UI';
 import router from '@/router/router';
+import vuex from '@/store';
 import directives from './directives';
 
 const app = createApp(App)
@@ -16,4 +17,5 @@ directives.forEach(directive => {
 
 app
   .use(router)
+  .use(vuex)
   .mount('#app')

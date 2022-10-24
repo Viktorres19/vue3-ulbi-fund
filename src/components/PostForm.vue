@@ -4,8 +4,7 @@
     <div>
       <MyInput
         v-focus
-        v-model:value.trim="post.title"
-        v-model:myValue="post.title"
+        v-model="post.title"
         type="text"
         placeholder="Додати назву"
       />
@@ -13,13 +12,14 @@
     </div>
     <div>
       <MyInput
-        v-model:value.trim="post.body"
+        v-model="post.body"
         type="text"
         placeholder="Додати опис"
       />
       {{ post.body }}
     </div>
-    <my-button>
+    <my-button
+    >
       Створити пост
     </my-button>
   </form>
@@ -38,14 +38,12 @@ export default {
   },
   methods: {
     createPost() {
-      let newItem = {
-        id: Date.now(),
-        title: this.post.title,
-        body: this.post.body
+      this.post.id = Date.now();
+      this.$emit('create', this.post)
+      this.post = {
+        title: '',
+        body: ''
       }
-      this.$emit('create', newItem)
-      this.post.title = '';
-      this.post.body = '';
     }
   },
   /*watch: {
