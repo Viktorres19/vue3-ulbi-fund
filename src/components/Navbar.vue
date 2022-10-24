@@ -9,6 +9,7 @@
     <div class="navbar__btns">
       <my-button @click="$router.push('/posts')">Пости</my-button>
       <my-button @click="$router.push('/about')">Про сайт</my-button>
+      <my-button @click="$router.push('/store')">Пости Vuex</my-button>
     </div>
   </div>
 </template>

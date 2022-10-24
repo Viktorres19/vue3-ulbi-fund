@@ -1,8 +1,21 @@
 <template>
   <div class="container">
+<!--    learning examples-->
+<!--    <h4>{{ $store.state.isAuth ? 'Користувач авторизован' : 'Авторизуйтесь, щоб користуватись додатком' }}</h4>
+    <h2>likes: {{ $store.state.likes }}</h2>
+    <h3>likes twice: {{ $store.getters.doubleLikes }}</h3>
+    <div>
+      <my-button @click="$store.commit('decrementLikes')">
+        decrease likes
+      </my-button>
+      <my-button @click="$store.commit('incrementLikes')">
+        increase likes
+      </my-button>
+    </div>-->
     <h1>Сторінка з постами</h1>
     <MyInput
-      v-model="searchQuery"
+      :model-value="searchQuery"
+      @update:model-value="setSearchQuery"
       placeholder="Пошук постів..."
       v-focus
     />
@@ -13,7 +26,8 @@
         Створити пост
       </my-button>
       <MySelect
-        v-model="selectedSort"
+        :model-value="selectedSort"
+        @update:model-value="setSelectedSort"
         :options="sortOptions"
       />
     </div>
@@ -28,16 +42,16 @@
     <svg v-if="isPostsLoading" xmlns="http://www.w3.org/2000/svg" style="margin:auto;background:0 0;display:block;shape-rendering:auto" width="200" height="200" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="4.166666666666666s"/><path fill-opacity=".8" fill="#e15b64" d="M50 50V0a50 50 0 0 1 50 50Z"/></g><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="5.5555555555555545s"/><path fill-opacity=".8" fill="#f47e60" d="M50 50h50a50 50 0 0 1-50 50Z"/></g><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="8.333333333333332s"/><path fill-opacity=".8" fill="#f8b26a" d="M50 50v50A50 50 0 0 1 0 50Z"/></g><g transform="matrix(.7 0 0 .7 15 15)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="0 50 50;360 50 50" keyTimes="0;1" dur="16.666666666666664s"/><path fill-opacity=".8" fill="#abbd81" d="M50 50H0A50 50 0 0 1 50 0Z"/></g></svg>
 <!--    <div ref="observer" class="observer"></div>-->
     <div v-intersection="loadMorePosts" class="observer"></div>
-    <!--    <div class="page__wrapper">
-          <button
-            v-for="pageSwitcher in totalPages"
-            :key="pageSwitcher"
-            :class="{'current-page': page === pageSwitcher}"
-            @click="switchPage(pageSwitcher)"
-          >
-            {{ pageSwitcher }}
-          </button>
-        </div>-->
+      <div class="page__wrapper">
+        <button
+          v-for="pageSwitcher in totalPages"
+          :key="pageSwitcher"
+          :class="{'current-page': page === pageSwitcher}"
+          @click="switchPage(pageSwitcher)"
+        >
+          {{ pageSwitcher }}
+        </button>
+      </div>
   </div>
 </template>
 
@@ -45,27 +59,25 @@
 import axios from 'axios';
 import PostForm from '@/components/PostForm';
 import PostList from '@/components/PostList';
-
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 export default {
   name: 'PostPage',
   components: {PostList, PostForm},
   data() {
     return {
-      posts: [],
       dialogVisible: false,
-      isPostsLoading: false,
-      selectedSort: '',
-      searchQuery: '',
-      page: 1,
-      limit: 10,
-      totalPages: 0,
-      sortOptions: [
-        {value: 'title', name: 'Назві'},
-        {value: 'body', name: 'Вмісту'}
-      ]
     }
   },
   methods: {
+    ...mapMutations({
+      setPage: 'post/setPage',
+      setSearchQuery: 'post/setSearchQuery',
+      setSelectedSort: 'post/setSelectedSort',
+    }),
+    ...mapActions({
+      loadMorePosts: 'post/loadMorePosts',
+      fetchPosts: 'post/fetchPosts'
+    }),
     createPost(post) {
       this.posts.push(post);
       this.dialogVisible = false;
@@ -74,70 +86,27 @@ export default {
       this.posts = this.posts.filter(p => p.id !== post.id)
     },
     showDialog() {
-      this.dialogVisible = true;
+      this.dialogVisible = true
     },
-    async fetchPosts() {
-      try {
-        this.isPostsLoading = true;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-          params: {
-            _page: this.page,
-            _limit: this.limit
-          }
-        });
-        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
-        this.posts = response.data;
-      } catch (e) {
-        alert('Помилка')
-      } finally {
-        this.isPostsLoading = false;
-      }
-    },
-    async loadMorePosts() {
-      try {
-        this.page += 1;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-          params: {
-            _page: this.page,
-            _limit: this.limit
-          }
-        });
-        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
-        this.posts = [...this.posts, ...response.data];
-      } catch (e) {
-        alert('Помилка')
-      }
-    }
   },
   mounted() {
     this.fetchPosts();
-    /*const options = {
-      rootMargin: '0px',
-      threshold: 1.0
-    }
-    const callback = (entries, observer) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts()
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);*/
   },
-  /*watch: {
-    selectedSort(newValue) {
-      this.posts.sort((post1, post2) => {
-        return post1[newValue]?.localeCompare(post2[newValue])
-      })
-    }
-  },*/
-  // sort using computed
   computed: {
-    sortedPosts() {
-      return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
-    },
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
-    }
+    ...mapState({
+      posts: state => state.post.posts,
+      isPostsLoading: state => state.post.isPostsLoading,
+      selectedSort: state => state.post.selectedSort,
+      searchQuery: state => state.post.searchQuery,
+      page: state => state.post.page,
+      limit: state => state.post.limit,
+      totalPages: state => state.post.totalPages,
+      sortOptions: state => state.post.sortOptions
+    }),
+    ...mapGetters({
+      sortedPosts: 'post/sortedPosts',
+      sortedAndSearchedPosts: 'post/sortedAndSearchedPosts'
+    })
   },
 }
 </script>
